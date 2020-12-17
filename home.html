@@ -3,144 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Home | Annotated</title>
 </head>
 <body>
 
     <div>
-        <button onclick="closeSesion()">Cerrar sesion</button>
+        <button id="closedSesion">Cerrar sesion</button>
     </div>
     
     <form id="formTask">
-        <input type="text" id="title">
-        <input type="text" id="description">
-        <input type="submit" value="Agregar">
+        <input type="text" id="title" placeholder="Title">
+        <input type="text" id="description" placeholder="Description">
+        <input type="submit" value="Add task">
     </form>
 
-    <h2>Tareas:</h2>
+    <h2>Tasks:</h2>
 
     <ul id="list">
         
     </ul>
 
 
+    <script src="./js/home.js" type="module"></script>
 
-
-
-
-
-    <script>
-
-        function closeSesion(){
-            localStorage.removeItem("user")
-            get()
-        }
-
-        function deleteTask(id) {
-            const userLocal = localStorage.getItem("user")
-            const userJson = JSON.parse(userLocal)
-            var {localId,idToken} = userJson
-
-            fetch(`https://auth-bluuweb.firebaseio.com/tareas/${localId}/${id}.json?auth=${idToken}`, {
-                method: "DELETE",
-                headers: {
-                    "Content-type":"application/json"
-                }
-            })
-            .then(res=>res.json())
-            .then(data => {
-                console.log(data)
-                get()
-            })
-            .catch(err => console.log(err))
-
-        
-        }
-
-        function showData(data) {
-            const listHtml = document.querySelector("#list")
-
-            if(data!=null) {
-
-                const keys = Object.keys(data)
-            listHtml.innerHTML = ""
-            keys.forEach(key=> {
-                console.log(data[key])
-                listHtml.innerHTML += `
-                    <li>
-                        <h2>${data[key].nombre}</h2>
-                        <p>${data[key].descripcion}</p>
-                        <button onclick="deleteTask('${key}')">Eliminar</button>
-                    </li>
-                `
-            })
-
-                } else {
-                    listHtml.innerHTML = "no hay tareas agrega una"
-                }
-
-            
-            
-            
-        }
-
-        function get() {
-            const userLocal = localStorage.getItem("user")
-        if(userLocal != null) {
-            const userJson = JSON.parse(userLocal)
-            const {localId,idToken} = userJson
-
-            fetch(`https://auth-bluuweb.firebaseio.com/tareas/${localId}.json/?auth=${idToken}`)
-            .then(res=>res.json())
-            .then(data => {
-                console.log()
-                showData(data)
-                
-            })
-        } else {
-            window.location.href = "index.html"
-        }
-        }
-
-        get()
-
-        //add task
-
-        const formTask = document.querySelector("#formTask")
-
-        formTask.addEventListener("submit", (e) => {
-            e.preventDefault()
-
-            const title = document.querySelector("#title")
-            const description = document.querySelector("#description")
-
-            const task = {
-                nombre: title.value,
-                descripcion: description.value
-            }
-
-            const userLocal = localStorage.getItem("user")
-            const userJson = JSON.parse(userLocal)
-            var {localId,idToken} = userJson
-
-            fetch(`https://auth-bluuweb.firebaseio.com/tareas/${localId}.json?auth=${idToken}`, {
-                method: "POST",
-                body: JSON.stringify(task),
-                headers: {
-                    "Content-type":"application/json"
-                }
-            })
-            .then(res=>res.json())
-            .then(data => {
-                console.log(data)
-                formTask.reset()
-                get()
-            })
-            .catch(err => console.log(err))
-
-        })
-
-
-    </script>
 </body>
 </html>

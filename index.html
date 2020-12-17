@@ -3,60 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Annotated</title>
 </head>
 <body>
-    
-    <form id="myForm">
-        <input type="email" id="email">
-        <input type="password" id="password">
-        <input type="submit" value="Ingresar">
-    </form>
 
-    <h2><a href="register.html">O registrate</a></h2>
+    <a href="signin.html">Sign In</a>
+    <a href="register.html">Register</a>
 
-
-
-
-
-
-    <script>
-
-        const myForm = document.querySelector("#myForm")
-
-        myForm.addEventListener("submit", (e) => {
-
-            e.preventDefault()
-
-            const email = document.querySelector("#email").value
-            const password = document.querySelector("#password").value
-
-            const user = {
-                email,
-                password,
-                returnSecureToken: true
-            }
-
-            fetch("https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyAEfLjzzCFhQlncEtJ3HiXNhOFSc-vONV4", {
-                method:"POST",
-                body: JSON.stringify(user),
-                headers: {
-                    "Content-Type":"application/json"
-                }
-            })
-            .then(res=>res.json())
-            .then(data => {
-                if(data.registered) {
-                    const user = JSON.stringify(data)
-                    localStorage.setItem("user", user)
-                    window.location.href = "home.html"
-                } else {
-                    console.log(data.error.message)
-                }
-            })
-            .catch(err=>console.log(err))
-        })
-        
-    </script>
 </body>
 </html>
